@@ -1,5 +1,5 @@
 *.pyc
-data/
+#data/
 __pycache__/
 checkpoints/
 *.pth
@@ -12,3 +12,10 @@ venv/
 .idea/Pytorch-UNet.iml
 .idea/rSettings.xml
 .idea/vcs.xml
+*.DS_Store
+data/.DS_Store
+data/DRIVE/.DS_Store
+data/.DS_Store
+data/DRIVE/.DS_Store
+data/DRIVE/test.zip
+data/DRIVE/test/.DS_Store

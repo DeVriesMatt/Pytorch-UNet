@@ -18,8 +18,8 @@ from torchvision import transforms, datasets, models
 
 from utils.dataset import BasicDataset
 
-dir_img = '/Users/mattdevries/Documents/GitHub/Deep-Vessel-Segmentation/data/IOSTARVesselSegmentationDatasetcopy/image/'
-dir_mask = '/Users/mattdevries/Documents/GitHub/Deep-Vessel-Segmentation/data/IOSTARVesselSegmentationDatasetcopy/GT/'
+dir_img = './data/IOSTAR/image/'
+dir_mask = './data/IOSTAR/GT/'
 dir_checkpoint = 'checkpoints/'
 
 
