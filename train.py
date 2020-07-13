@@ -51,16 +51,16 @@ def train_net(net,
     writer = SummaryWriter(comment='LR_{0}_BS_{1}_SCALE_{2}'.format(lr, batch_size, img_scale))
     global_step = 0
 
-    logging.info(f'''Starting training:
-        Epochs:          {epochs}
-        Batch size:      {batch_size}
-        Learning rate:   {lr}
-        Training size:   {n_train}
-        Validation size: {n_val}
-        Checkpoints:     {save_cp}
-        Device:          {device.type}
-        Images scaling:  {img_scale}
-    ''')
+    logging.info('''Starting training:
+        Epochs:          {0}
+        Batch size:      {1}
+        Learning rate:   {2}
+        Training size:   {3}
+        Validation size: {4}
+        Checkpoints:     {5}
+        Device:          {6}
+        Images scaling:  {7}
+    '''.format(epochs, batch_size, lr, n_train, n_val, save_cp, device.type, img_scale))
 
     optimizer = optim.RMSprop(net.parameters(), lr=lr, weight_decay=1e-8, momentum=0.9)
     scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'min' if net.n_classes > 1 else 'max', patience=2)
