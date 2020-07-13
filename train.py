@@ -73,14 +73,14 @@ def train_net(net,
         net.train()
 
         epoch_loss = 0
-        with tqdm(total=n_train, desc=f'Epoch {epoch + 1}/{epochs}', unit='img') as pbar:
+        with tqdm(total=n_train, desc='Epoch {0}/{1}'.format(epoch + 1, epochs), unit='img') as pbar:
             for batch in train_loader:
                 imgs = batch['image']
                 true_masks = batch['mask']
                 assert imgs.shape[1] == net.n_channels, \
-                    f'Network has been defined with {net.n_channels} input channels, ' \
-                    f'but loaded images have {imgs.shape[1]} channels. Please check that ' \
-                    'the images are loaded correctly.'
+                    'Network has been defined with {0} input channels, \n'\
+                    'but loaded images have {1} channels. Please check that \n ' \
+                    'the images are loaded correctly.'.format(net.n_channels, imgs.shape[1])
 
                 imgs = imgs.to(device=device, dtype=torch.float32)
                 mask_type = torch.float32 if net.n_classes == 1 else torch.long
@@ -128,8 +128,8 @@ def train_net(net,
             except OSError:
                 pass
             torch.save(net.state_dict(),
-                       dir_checkpoint + f'CP_epoch{epoch + 1}.pth')
-            logging.info(f'Checkpoint {epoch + 1} saved !')
+                       dir_checkpoint + 'CP_epoch{}.pth'.format(epoch + 1))
+            logging.info('Checkpoint {} saved !'.format(epoch + 1))
 
     writer.close()
 
@@ -157,7 +157,7 @@ if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
     args = get_args()
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    logging.info(f'Using device {device}')
+    logging.info('Using device {}'.format(device))
 
     # Change here to adapt to your data
     # n_channels=3 for RGB images
@@ -166,16 +166,16 @@ if __name__ == '__main__':
     #   - For 2 classes, use n_classes=1
     #   - For N > 2 classes, use n_classes=N
     net = UNet(n_channels=3, n_classes=1, bilinear=True)
-    logging.info(f'Network:\n'
-                 f'\t{net.n_channels} input channels\n'
-                 f'\t{net.n_classes} output channels (classes)\n'
-                 f'\t{"Bilinear" if net.bilinear else "Transposed conv"} upscaling')
+    logging.info('Network:\n'
+                 '\t{0} input channels\n'
+                 '\t{1} output channels (classes)\n'
+                 '\t{2} upscaling'.format(net.n_channels, net.n_classes, "Bilinear" if net.bilinear else "Transposed conv"))
 
     if args.load:
         net.load_state_dict(
             torch.load(args.load, map_location=device)
         )
-        logging.info(f'Model loaded from {args.load}')
+        logging.info('Model loaded from {}'.format(args.load))
 
     net.to(device=device)
     # faster convolutions, but more memory
