@@ -14,7 +14,7 @@ from unet import UNet
 
 from torch.utils.tensorboard import SummaryWriter
 from torch.utils.data import DataLoader, random_split
-from torchvision import transforms, datasets, models
+from torchvision import transforms
 
 from utils.dataset import BasicDataset
 
