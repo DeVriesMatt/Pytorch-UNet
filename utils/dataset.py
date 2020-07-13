@@ -9,10 +9,11 @@ from PIL import Image
 
 
 class BasicDataset(Dataset):
-    def __init__(self, imgs_dir, masks_dir, scale=1):
+    def __init__(self, imgs_dir, masks_dir, scale=1, transform=None):
         self.imgs_dir = imgs_dir
         self.masks_dir = masks_dir
         self.scale = scale
+        self.transform = transform
         assert 0 < scale <= 1, 'Scale must be between 0 and 1'
 
         self.ids = [splitext(file)[0] for file in listdir(imgs_dir)
@@ -43,8 +44,9 @@ class BasicDataset(Dataset):
 
     def __getitem__(self, i):
         idx = self.ids[i]
-        mask_file = glob(self.masks_dir + idx + '.*')
-        img_file = glob(self.imgs_dir + idx + '.*')
+        mask_file = glob(self.masks_dir + idx.zfill(5) + '.png')
+        # print(self.masks_dir + idx.zfill(5) + '.png')
+        img_file = glob(self.imgs_dir + idx.zfill(5) + '.png')
 
         assert len(mask_file) == 1, \
             f'Either no mask or multiple masks found for the ID {idx}: {mask_file}'

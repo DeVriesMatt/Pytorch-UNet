@@ -13,11 +13,13 @@ from eval import eval_net
 from unet import UNet
 
 from torch.utils.tensorboard import SummaryWriter
-from utils.dataset import BasicDataset
 from torch.utils.data import DataLoader, random_split
+from torchvision import transforms, datasets, models
 
-dir_img = 'data/imgs/'
-dir_mask = 'data/masks/'
+from utils.dataset import BasicDataset
+
+dir_img = '/Users/mattdevries/Documents/GitHub/Deep-Vessel-Segmentation/data/IOSTARVesselSegmentationDatasetcopy/image/'
+dir_mask = '/Users/mattdevries/Documents/GitHub/Deep-Vessel-Segmentation/data/IOSTARVesselSegmentationDatasetcopy/GT/'
 dir_checkpoint = 'checkpoints/'
 
 
@@ -30,7 +32,16 @@ def train_net(net,
               save_cp=True,
               img_scale=0.5):
 
-    dataset = BasicDataset(dir_img, dir_mask, img_scale)
+    trans = transforms.Compose([transforms.RandomHorizontalFlip(),
+                                   transforms.RandomRotation(degrees=(90, 90)),
+                                   transforms.RandomRotation(degrees=(180, 180)),
+                                   transforms.RandomRotation(degrees=(270, 270)),
+                                   transforms.RandomVerticalFlip(p=1),
+                                   transforms.RandomHorizontalFlip(p=1),
+                                   transforms.ToTensor(),
+                                   transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+                                   ])
+    dataset = BasicDataset(dir_img, dir_mask, img_scale, transform=trans)
     n_val = int(len(dataset) * val_percent)
     n_train = len(dataset) - n_val
     train, val = random_split(dataset, [n_train, n_val])
@@ -178,6 +189,7 @@ if __name__ == '__main__':
                   device=device,
                   img_scale=args.scale,
                   val_percent=args.val / 100)
+        torch.save(net.state_dict(), 'MODEL.pth')
     except KeyboardInterrupt:
         torch.save(net.state_dict(), 'INTERRUPTED.pth')
         logging.info('Saved interrupt')
