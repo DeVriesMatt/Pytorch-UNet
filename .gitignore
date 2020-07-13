@@ -3,7 +3,7 @@
 __pycache__/
 checkpoints/
 *.pth
-*.jpg
+#*.jpg
 SUBMISSION*
 venv/
 .idea/inspectionProfiles/profiles_settings.xml
@@ -13,9 +13,4 @@ venv/
 .idea/rSettings.xml
 .idea/vcs.xml
 *.DS_Store
-data/.DS_Store
-data/DRIVE/.DS_Store
-data/.DS_Store
-data/DRIVE/.DS_Store
-data/DRIVE/test.zip
-data/DRIVE/test/.DS_Store
+
