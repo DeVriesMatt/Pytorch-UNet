@@ -114,7 +114,7 @@ if __name__ == "__main__":
     logging.info("Model loaded !")
 
     for i, fn in enumerate(in_files):
-        logging.info("\nPredicting image {} ...".format(fn))
+        logging.info("\nPredicting images {} ...".format(fn))
 
         img = Image.open(fn)
 
@@ -132,5 +132,5 @@ if __name__ == "__main__":
             logging.info("Mask saved to {}".format(out_files[i]))
 
         if args.viz:
-            logging.info("Visualizing results for image {}, close to continue ...".format(fn))
+            logging.info("Visualizing results for images {}, close to continue ...".format(fn))
             plot_img_and_mask(img, mask)

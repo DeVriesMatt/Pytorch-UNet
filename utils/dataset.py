@@ -51,7 +51,7 @@ class BasicDataset(Dataset):
         assert len(mask_file) == 1, \
             f'Either no mask or multiple masks found for the ID {idx}: {mask_file}'
         assert len(img_file) == 1, \
-            f'Either no image or multiple images found for the ID {idx}: {img_file}'
+            f'Either no images or multiple images found for the ID {idx}: {img_file}'
         mask = Image.open(mask_file[0])
         img = Image.open(img_file[0])
 
