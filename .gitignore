@@ -13,4 +13,5 @@ venv/
 .idea/rSettings.xml
 .idea/vcs.xml
 *.DS_Store
+runs/
 
