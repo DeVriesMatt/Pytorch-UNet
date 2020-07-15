@@ -2,6 +2,7 @@ import argparse
 import logging
 import os
 import sys
+import datetime
 
 import numpy as np
 import torch
@@ -18,8 +19,8 @@ from torchvision import transforms
 
 from utils.dataset import BasicDataset
 
-dir_img = './data/IOSTAR_Aug_New/image/'
-dir_mask = './data/IOSTAR_Aug_New/GT/'
+dir_img = './processed/IOSTAR/processed/image/patch_128/images/'
+dir_mask = './processed/IOSTAR/processed/GT/patch_128/images/'
 dir_checkpoint = 'checkpoints/'
 
 
@@ -180,7 +181,7 @@ if __name__ == '__main__':
     net.to(device=device)
     # faster convolutions, but more memory
     # cudnn.benchmark = True
-
+    date = datetime.datetime.now()
     try:
         train_net(net=net,
                   epochs=args.epochs,
@@ -189,7 +190,8 @@ if __name__ == '__main__':
                   device=device,
                   img_scale=args.scale,
                   val_percent=args.val / 100)
-        torch.save(net.state_dict(), 'MODEL.pth')
+
+        torch.save(net.state_dict(), 'MODEL' + date.strftime("%c") + '.pth')
     except KeyboardInterrupt:
         torch.save(net.state_dict(), 'INTERRUPTED.pth')
         logging.info('Saved interrupt')

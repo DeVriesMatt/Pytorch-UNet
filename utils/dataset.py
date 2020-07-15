@@ -44,24 +44,26 @@ class BasicDataset(Dataset):
 
     def __getitem__(self, i):
         idx = self.ids[i]
-        mask_file = glob(self.masks_dir + idx.zfill(5) + '.png')
-        # print(self.masks_dir + idx.zfill(5) + '.png')
-        img_file = glob(self.imgs_dir + idx.zfill(5) + '.png')
+        for i in range(8):
+            for j in range(8):
+                mask_file = glob(self.masks_dir + idx.zfill(5) + '.png')
+                # print(self.masks_dir + idx.zfill(5) + '.png')
+                img_file = glob(self.imgs_dir + idx.zfill(5) + '.png')
 
-        assert len(mask_file) == 1, \
-            f'Either no mask or multiple masks found for the ID {idx}: {mask_file}'
-        assert len(img_file) == 1, \
-            f'Either no images or multiple images found for the ID {idx}: {img_file}'
-        mask = Image.open(mask_file[0])
-        img = Image.open(img_file[0])
+                assert len(mask_file) == 1, \
+                    f'Either no mask or multiple masks found for the ID {idx}: {mask_file}'
+                assert len(img_file) == 1, \
+                    f'Either no images or multiple images found for the ID {idx}: {img_file}'
+                mask = Image.open(mask_file[0])
+                img = Image.open(img_file[0])
 
-        assert img.size == mask.size, \
-            f'Image and mask {idx} should be the same size, but are {img.size} and {mask.size}'
+                assert img.size == mask.size, \
+                    f'Image and mask {idx} should be the same size, but are {img.size} and {mask.size}'
 
-        img = self.preprocess(img, self.scale)
-        mask = self.preprocess(mask, self.scale)
+                img = self.preprocess(img, self.scale)
+                mask = self.preprocess(mask, self.scale)
 
-        return {
-            'image': torch.from_numpy(img).type(torch.FloatTensor),
-            'mask': torch.from_numpy(mask).type(torch.FloatTensor)
-        }
+                return {
+                    'image': torch.from_numpy(img).type(torch.FloatTensor),
+                    'mask': torch.from_numpy(mask).type(torch.FloatTensor)[:1, :, :]
+                }
