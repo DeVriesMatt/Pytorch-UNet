@@ -41,7 +41,7 @@ def train_net(net,
                                    transforms.ToTensor(),
                                    transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
                                    ])
-    dataset = BasicDataset(dir_img, dir_mask, img_scale, transform=trans)
+    dataset = BasicDataset(dir_img, dir_mask, img_scale) 
     n_val = int(len(dataset) * val_percent)
     n_train = len(dataset) - n_val
     train, val = random_split(dataset, [n_train, n_val])
