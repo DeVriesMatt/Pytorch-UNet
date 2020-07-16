@@ -10,14 +10,15 @@ from shutil import copyfile
 
 from PIL import Image
 from tqdm import tqdm
+import numpy as np
 
 from util import create_dir_if_not_exist
 
 
 DATA_RAW_DIR = "./data"
 # EXAMPLE_SLIDES_ZIP = DATA_RAW_DIR + "/example_slides.zip"
-IOSTAR_IMAGE = DATA_RAW_DIR + "/IOSTAR/image"
-IOSTAR_GT = DATA_RAW_DIR + "/IOSTAR/GT"
+IOSTAR_IMAGE = DATA_RAW_DIR + "/IOSTAR/image/train"
+IOSTAR_GT = DATA_RAW_DIR + "/IOSTAR/GT/train"
 PROCESSED_IOSTAR_DIR_IMAGE = "./processed/IOSTAR/processed/image"
 PROCESSED_IOSTAR_DIR_GT = "./processed/IOSTAR/processed/GT"
 
@@ -56,9 +57,23 @@ def create_patch(whole_slide_dir, patch_dir, patch_size):
                 for i_y, y in enumerate(ys):
                     box = (x, y, x + patch_size, y + patch_size)
                     cropped_data = image.crop(box)
+                    # print(cropped_data)
                     cropped_image = Image.new('RGB', (patch_size, patch_size), 255)
                     cropped_image.paste(cropped_data)
-                    cropped_image.save(save_dir + "/" + file_well_num + "_x" + str(i_x) + "_y" + str(i_y) + ".png")
+                    np_data = np.array(cropped_image)
+                    # print(np_data.shape)
+                    if np.mean(np_data[:, :, :1]) == 0:
+                        continue
+
+                    processed_GT_file = os.listdir("processed/IOSTAR/processed/GT/patch_128/images")
+
+                    if "GT" in whole_slide_dir:
+                        cropped_image.save(save_dir + "/" + file_well_num + "_x" + str(i_x) + "_y" + str(i_y) + ".png")
+                    else:
+                        naming_string = file_well_num + "_x" + str(i_x) + "_y" + str(i_y) + ".png"
+                        if naming_string not in processed_GT_file:
+                            continue
+                        cropped_image.save(save_dir + "/" + file_well_num + "_x" + str(i_x) + "_y" + str(i_y) + ".png")
                     total += 1
 
     print('Created', total, 'split images')
@@ -68,5 +83,24 @@ def create_patch(whole_slide_dir, patch_dir, patch_size):
 
 if __name__ == "__main__":
     patch_size = 128
-    create_patch(IOSTAR_IMAGE, PROCESSED_IOSTAR_DIR_IMAGE + "/patch_{:d}/".format(patch_size), patch_size)
+    print('===================== splitting GT ====================================')
     create_patch(IOSTAR_GT, PROCESSED_IOSTAR_DIR_GT + "/patch_{:d}/".format(patch_size), patch_size)
+
+    print('===================== splitting images ====================================')
+    create_patch(IOSTAR_IMAGE, PROCESSED_IOSTAR_DIR_IMAGE + "/patch_{:d}/".format(patch_size), patch_size)
+
+
+    processed_GT_file = os.listdir("processed/IOSTAR/processed/GT/patch_128/images")
+    processed_IMAGE_file = os.listdir("processed/IOSTAR/processed/image/patch_128/images")
+
+    missing = []
+    nk = set(processed_IMAGE_file).intersection(processed_GT_file)
+    for x in processed_IMAGE_file:
+        if x in nk:
+            continue
+        missing.append(x)
+
+    print(len(missing))
+    print(missing)
+
+

@@ -18,7 +18,7 @@ class BasicDataset(Dataset):
 
         self.ids = [splitext(file)[0] for file in listdir(imgs_dir)
                     if not file.startswith('.')]
-        logging.info(f'Creating dataset with {len(self.ids)} examples')
+        logging.info('Creating dataset with {} examples'.format(len(self.ids)))
 
     def __len__(self):
         return len(self.ids)
@@ -51,14 +51,14 @@ class BasicDataset(Dataset):
                 img_file = glob(self.imgs_dir + idx.zfill(5) + '.png')
 
                 assert len(mask_file) == 1, \
-                    f'Either no mask or multiple masks found for the ID {idx}: {mask_file}'
+                    'Either no mask or multiple masks found for the ID {0}: {1}'.format(idx, mask_file)
                 assert len(img_file) == 1, \
-                    f'Either no images or multiple images found for the ID {idx}: {img_file}'
+                    'Either no images or multiple images found for the ID {0}: {1}'.format(idx, img_file)
                 mask = Image.open(mask_file[0])
                 img = Image.open(img_file[0])
 
                 assert img.size == mask.size, \
-                    f'Image and mask {idx} should be the same size, but are {img.size} and {mask.size}'
+                    'Image and mask {0} should be the same size, but are {1} and {2}'.format(idx, img.size, mask.size)
 
                 img = self.preprocess(img, self.scale)
                 mask = self.preprocess(mask, self.scale)

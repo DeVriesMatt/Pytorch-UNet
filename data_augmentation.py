@@ -11,21 +11,24 @@ from scipy import ndimage
 import numpy as np
 from tqdm import tqdm
 import imageio
+from util import create_dir_if_not_exist
 
 
-GT = "/Users/mattdevries/Documents/GitHub/Pytorch-UNet/data/IOSTAR/GT/"
-image = "/Users/mattdevries/Documents/GitHub/Pytorch-UNet/data/IOSTAR/image/"
+PATCH_GT = "./processed/IOSTAR/processed/GT/patch_128/images"
+PATCH_IMAGE = "./processed/IOSTAR/processed/image/patch_128/images"
+AUG_PROC_GT = "./augmented_patch/GT/"
+AUG_PROC_IMAGE = "./augmented_patch/image/"
 
 images = []
 
-for img_path in sorted(glob.glob(image + '/*.png')):
-    print(img_path)
+for img_path in sorted(glob.glob(PATCH_IMAGE + '/*.png')):
+    # print(img_path)
     images.append(mpimg.imread(img_path, 0))
 
 ground_truth = []
 
-for img_path in sorted(glob.glob(GT + '/*.png')):
-    print(img_path)
+for img_path in sorted(glob.glob(PATCH_GT + '/*.png')):
+    # print(img_path)
     ground_truth.append(mpimg.imread(img_path, 0))
 
 print("Original data length: {}".format(len(images)))
@@ -61,55 +64,22 @@ print("Augmented gt data length: {}".format(len(final_target_train)))
 
 print(len(final_target_train), len(final_train_data))
 
+create_dir_if_not_exist(AUG_PROC_IMAGE)
+create_dir_if_not_exist(AUG_PROC_GT)
 
 for i in range(len(final_train_data)):
-    plt.imsave('image{}.png'.format(i + 1), final_train_data[i])
-
-# %%
-
-for i in range(len(final_target_train)):
-    plt.imsave('gt{}.png'.format(i + 1), final_target_train[i])
-
-# %%
-
-for i in range(len(final_target_train)):
-    print(final_train_data[i].shape)
-
-# %%
-
-aug_path = "/Users/mattdevries/Documents/GitHub/Pytorch-UNet/data/IOSTAR_Aug/images/"
-augs = []
-for img_path in sorted(glob.glob(aug_path + '/*.png')):
-    print(img_path)
-    augs.append(mpimg.imread(img_path, 0))
-
-# %%
-
-for i in range(len(augs)):
-    print(augs[i].shape)
-
-# %%
-
-
-for i in range(len(final_train_data)):
-    imageio.imwrite('image{}.png'.format(i + 1), final_train_data[i])
-
+    name_string = '{}'.format(i + 1).zfill(5)
+    imageio.imwrite(AUG_PROC_IMAGE + name_string + '.png', final_train_data[i])
 
 
 print(final_target_train[i].shape)
-
-# %%
 
 for i in range(len(final_target_train)):
     final_target_train[i] = final_target_train[i][:, :, :1]
 
-# %%
-
 print(final_target_train[i].shape)
 
-# %%
-
 for i in range(len(final_target_train)):
-    imageio.imwrite('gt{}.png'.format(i + 1), final_target_train[i])
+    name_string = '{}'.format(i + 1).zfill(5)
+    imageio.imwrite(AUG_PROC_GT + name_string + '.png', final_target_train[i])
 
-# %%

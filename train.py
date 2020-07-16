@@ -190,8 +190,9 @@ if __name__ == '__main__':
                   device=device,
                   img_scale=args.scale,
                   val_percent=args.val / 100)
-
-        torch.save(net.state_dict(), 'MODEL' + date.strftime("%c") + '.pth')
+        model_string = 'MODEL' + date.strftime("%c") + '.pth'
+        model_string.replace(" ", "_")
+        torch.save(net.state_dict(), model_string)
     except KeyboardInterrupt:
         torch.save(net.state_dict(), 'INTERRUPTED.pth')
         logging.info('Saved interrupt')
