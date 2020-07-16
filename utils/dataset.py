@@ -47,7 +47,7 @@ class BasicDataset(Dataset):
         for i in range(8):
             for j in range(8):
                 mask_file = glob(self.masks_dir + idx.zfill(5) + '.png')
-                # print(self.masks_dir + idx.zfill(5) + '.png')
+                print(self.masks_dir + idx.zfill(5) + '.png')
                 img_file = glob(self.imgs_dir + idx.zfill(5) + '.png')
 
                 assert len(mask_file) == 1, \
