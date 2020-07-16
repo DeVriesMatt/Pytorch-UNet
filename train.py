@@ -19,8 +19,8 @@ from torchvision import transforms
 
 from utils.dataset import BasicDataset
 
-dir_img = './processed/IOSTAR/processed/image/patch_128/images/'
-dir_mask = './processed/IOSTAR/processed/GT/patch_128/images/'
+dir_img = './augmented_patch/image/'
+dir_mask = './augmented_patch/GT/'
 dir_checkpoint = 'checkpoints/'
 
 
