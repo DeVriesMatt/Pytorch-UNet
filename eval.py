@@ -8,7 +8,7 @@ from dice_loss import dice_coeff
 def eval_net(net, loader, device):
     """Evaluation without the densecrf with the dice coefficient"""
     net.eval()
-    mask_type = torch.float32 if net.n_classes == 1 else torch.long
+    mask_type = torch.float32 if 1 == 1 else torch.long
     n_val = len(loader)  # the number of batch
     tot = 0
 
