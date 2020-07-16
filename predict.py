@@ -8,7 +8,7 @@ import torch.nn.functional as F
 from PIL import Image
 from torchvision import transforms
 
-from unet import UNet
+from unet import *
 from utils.data_vis import plot_img_and_mask
 from utils.dataset import BasicDataset
 
@@ -103,7 +103,7 @@ if __name__ == "__main__":
     out_files = get_output_filenames(args)
 
     net = UNet(n_channels=3, n_classes=1)
-
+    # net = AttU_Net()
     logging.info("Loading model {}".format(args.model))
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
